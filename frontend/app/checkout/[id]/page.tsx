@@ -39,11 +39,10 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
   });
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/products`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/products/${params.id}`)
       .then((res) => res.json())
-      .then((data: Product[]) => {
-        const p = data.find(x => x.id.toString() === params.id);
-        if (p) setProduct(p);
+      .then((data) => {
+        if (data.success && data.data) setProduct(data.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -59,22 +58,29 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
     setErrorMsg("");
 
     try {
-      const res = await fetch("http://localhost:8080/api/orders", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/order`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...formData,
+          full_name: formData.name,
+          phone: formData.phone,
+          wilaya: formData.wilaya,
+          commune: formData.commune,
           product_id: product.id,
+          product_name: product.name,
+          price: product.price * formData.quantity,
         }),
       });
 
-      if (!res.ok) {
-        throw new Error("حدث خطأ أثناء إرسال الطلب");
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        const errMsg = data.errors ? data.errors.join('\n') : (data.message || 'حدث خطأ أثناء إرسال الطلب');
+        throw new Error(errMsg);
       }
 
-      const data = await res.json();
-      setSuccessMsg(data.message || "تم تأكيد طلبك، سنتصل بك قريباً");
-      setFormData({ name: "", phone: "", wilaya: "", commune: "", quantity: 1 });
+      setSuccessMsg(data.message || 'تم تأكيد طلبك، سنتصل بك قريباً');
+      setFormData({ name: '', phone: '', wilaya: '', commune: '', quantity: 1 });
     } catch (err: any) {
       setErrorMsg(err.message);
     } finally {
@@ -126,7 +132,7 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
           
           <div className="summary-product">
             <div className="summary-image">
-              <Image src={product.image_url} alt={product.name} layout="fill" objectFit="cover" />
+              <Image src={product.image_url} alt={product.name} fill style={{ objectFit: 'cover' }} sizes="80px" />
             </div>
             <div>
               <h3 style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: '0.25rem' }}>{product.name}</h3>

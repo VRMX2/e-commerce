@@ -15,10 +15,12 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/products")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/products`)
       .then((res) => res.json())
       .then((data) => {
-        setProducts(data || []);
+        // Handle both { success, data: [...] } and plain array responses
+        const list = Array.isArray(data.data) ? data.data : Array.isArray(data) ? data : [];
+        setProducts(list);
         setLoading(false);
       })
       .catch((err) => {
