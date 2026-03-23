@@ -1,0 +1,1 @@
+globalThis.__RSC_MANIFEST=(globalThis.__RSC_MANIFEST||{});globalThis.__RSC_MANIFEST["/_not-found/page"]={"moduleLoading":{"prefix":"/_next/","crossOrigin":null},"ssrModuleMapping":{},"edgeSSRModuleMapping":{},"clientModules":{},"entryCSSFiles":{"C:\\vrmx_khadmoney\\e-commerce\\frontend\\":[],"C:\\vrmx_khadmoney\\e-commerce\\frontend\\app\\_not-found\\page":[]}}
