@@ -18,6 +18,7 @@ const WILAYAS = [
 interface Product {
   id: number;
   name: string;
+  description: string;
   price: number;
   image_url: string;
 }
@@ -113,7 +114,8 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
           </svg>
         </div>
         <h2 className="success-title">{successMsg}</h2>
-        <button onClick={() => router.push("/")} className="link-back" style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+        <p className="success-desc">شكراً لاختيارك ساعات الفخامة. لقد تم تسجيل طلبك وسيقوم فريقنا بالتواصل معك لتأكيد الشحن.</p>
+        <button onClick={() => router.push("/")} className="link-back" style={{ border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
           العودة للرئيسية
         </button>
       </div>
@@ -152,18 +154,20 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
           
           <div className="summary-total">
             <span>المجموع الإجمالي</span>
-            <span className="summary-total-price">{product.price * formData.quantity} د.ج</span>
+            <span className="summary-total-price">{(product.price * formData.quantity).toLocaleString('ar-DZ')} د.ج</span>
           </div>
         </div>
 
         {/* Checkout Form */}
         <div style={{ order: 2 }}>
-          <form onSubmit={handleSubmit}>
-            {errorMsg && (
-              <div className="alert-error">
-                {errorMsg}
-              </div>
-            )}
+          <div className="checkout-form-container">
+            <form onSubmit={handleSubmit}>
+              {errorMsg && (
+                <div className="alert-error animate-fade-in">
+                  <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  {errorMsg}
+                </div>
+              )}
             
             <div className="form-group">
               <label className="form-label">الاسم الكامل *</label>
@@ -246,6 +250,7 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
               </p>
             </div>
           </form>
+          </div>
         </div>
 
       </div>

@@ -6,6 +6,7 @@ import ProductCard from "../components/ProductCard";
 interface Product {
   id: number;
   name: string;
+  description: string;
   price: number;
   image_url: string;
 }
@@ -32,17 +33,19 @@ export default function Home() {
   return (
     <div>
       <section className="hero-section">
+        <div className="hero-glow"></div>
         <div className="hero-content">
-          <h2 className="hero-title">أناقة لا مثيل لها</h2>
+          <div className="hero-badge">تشكيلة 2026 الجديدة</div>
+          <h2 className="hero-title">أناقة <span>لا مثيل لها</span></h2>
           <p className="hero-subtitle">
-            اكتشفي تشكيلتنا الجديدة من الساعات الفاخرة. الجودة، الدقة، والجمال في مكان واحد. الدفع عند الاستلام لجميع ولايات الجزائر.
+            اكتشفي تشكيلتنا الحصرية من الساعات الفاخرة. الجودة، الدقة، والجمال في مكان واحد. الدفع عند الاستلام لجميع ولايات الجزائر.
           </p>
-          <a href="#products" className="hero-button">تصفح التشكيلة</a>
+          <a href="#products" className="hero-button">تصفح التشكيلة الفاخرة</a>
         </div>
       </section>
 
-      <section id="products" className="container text-center" style={{ marginTop: '4rem', marginBottom: '4rem' }}>
-        <h2 className="section-title">أحدث المنتجات</h2>
+      <section id="products" className="container text-center" style={{ marginTop: '5rem', marginBottom: '5rem' }}>
+        <h2 className="section-title animate-fade-in">أحدث المنتجات</h2>
         <div className="title-underline"></div>
         
         {loading ? (
