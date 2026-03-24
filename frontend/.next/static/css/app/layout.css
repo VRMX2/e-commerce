@@ -662,6 +662,83 @@ a {
   transform: translateY(-2px);
 }
 
+/* Contact Section */
+.contact-section {
+  padding: 6rem 1rem;
+  background-color: var(--surface-darker);
+  position: relative;
+  border-top: 1px solid var(--border-dark);
+}
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+.contact-card {
+  background-color: var(--surface-dark);
+  border: 1px solid var(--glass-border);
+  border-radius: 1.5rem;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+.contact-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, transparent, var(--primary-gold), transparent);
+  transform: scaleX(0);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.contact-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--border-gold-subtle);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 20px rgba(212, 175, 55, 0.1);
+}
+.contact-card:hover::before {
+  transform: scaleX(1);
+}
+.contact-icon {
+  width: 70px;
+  height: 70px;
+  background: var(--primary-gold-dim);
+  color: var(--primary-gold);
+  border-radius: 50%;
+  border: 1px solid var(--border-gold-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem auto;
+  transition: all 0.4s ease;
+}
+.contact-card:hover .contact-icon {
+  transform: scale(1.1) rotate(5deg);
+  background: var(--primary-gold);
+  color: var(--bg-dark);
+  box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+}
+.contact-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+.contact-value {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+.contact-value[dir="ltr"] {
+  font-family: monospace;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
 /*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[2].use[1]!./node_modules/next/dist/build/webpack/loaders/next-font-loader/index.js??ruleSet[1].rules[13].oneOf[2].use[2]!./node_modules/next/font/google/target.css?{"path":"app\\layout.tsx","import":"Cairo","arguments":[{"subsets":["arabic"],"weight":["400","500","700"]}],"variableName":"cairo"} ***!
   \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
