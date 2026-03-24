@@ -1,57 +1,57 @@
-# E-Commerce Online Store (Algeria COD)
+# ⌚ E-Commerce Watch Store (Algeria)
 
-Production-ready full-stack web application designed for an online watch store in Algeria with Cash on Delivery (COD) functionality.
+A stunning, production-ready, full-stack e-commerce application tailored specifically for the Algerian market. Focused on selling high-end women's watches, this application provides an ultra-premium dark-mode UI with a seamless **Cash on Delivery (COD)** checkout experience.
 
-## Tech Stack
-- **Frontend**: Next.js 14, React, Tailwind CSS, TypeScript
-- **Backend**: Go (Golang), Gin Framework, GORM
-- **Database**: PostgreSQL
-- **Integrations**: Google Sheets API
+---
 
-## Setup Instructions
+## 🚀 Features
 
-### 1. Database Setup (PostgreSQL)
-1. Ensure PostgreSQL is installed and running.
-2. Create a database named `ecommerce`:
-   ```sql
-   CREATE DATABASE ecommerce;
-   ```
-3. Copy `backend/.env.example` to `backend/.env` and update `DB_PASSWORD` and other details.
+- **Premium UI/UX:** A responsive glassmorphism aesthetic tailored for high-ticket luxury items with pure custom CSS animations.
+- **Localized Checkout:** Built-in form validation specifically for Algerian phone numbers (`05/06/07`) and a complete 58-Wilaya dropdown list.
+- **Workflow Automation:** Instantly synchronizes every single order into an **n8n Automation System** via native webhooks.
+- **Google Sheets Sync:** Directly routes the n8n automated payload directly into a master tracking Google Sheet.
+- **Fully Integrated Backend:** Node.js Express server connected securely to a scalable PostgreSQL database.
 
-### 2. Google Sheets API Integration
-1. Go to the [Google Cloud Console](https://console.cloud.google.com/).
-2. Create a new project and enable the **Google Sheets API**.
-3. Create a **Service Account**, and generate a JSON key.
-4. Rename that JSON key to `credentials.json` and place it in the `backend/` directory.
-5. Create a new Google Sheet. Share it with your Service Account email (give "Editor" access).
-6. Copy the Spreadsheet ID from the URL (the long string between `/d/` and `/edit`) and set it as `SPREADSHEET_ID` in `backend/.env`.
-7. Ensure your sheet is named `Sheet1` or update `backend/services/sheets.go` to match. 
-   *(Required Columns: Name, Phone, Wilaya, Commune, Product, Date)*
+---
 
-### 3. Running the Backend
-1. Navigate to the backend directory:
-   ```bash
-   cd backend
-   ```
-2. Download dependencies and run the server:
-   ```bash
-   go mod tidy
-   go run main.go
-   ```
-3. The server runs on `http://localhost:8080`.
-The database schemas and seed products will automatically run on startup.
+## 🛠️ Technology Stack
 
-### 4. Running the Frontend
-1. Navigate to the frontend directory:
-   ```bash
-   cd frontend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Run the development server:
-   ```bash
-   npm run dev
-   ```
-4. Access the store at `http://localhost:3000`.
+1. **Frontend:** React + Next.js (TypeScript)
+2. **Backend:** Node.js + Express.js
+3. **Database:** PostgreSQL
+4. **Automation Pipeline:** n8n 
+5. **Data Storage:** Google Sheets via webhook execution
+
+---
+
+## ⚙️ How to Run Locally
+
+### 1. Database Setup
+Ensure PostgreSQL is running on your machine.
+Run the database creation scripts exactly as provided in `db/schema.sql` and `backend/seed.js` to initialize the store's inventory.
+
+### 2. Backend API
+1. Open a terminal and navigate to: `cd backend`
+2. Install dependencies: `npm install`
+3. Configure your `.env` file containing your Postgres credentials and `N8N_WEBHOOK_URL`.
+4. Start the server: `npm run dev`
+*(Runs automatically on `http://localhost:5000`)*
+
+### 3. Frontend Application
+1. Open a new terminal and navigate to: `cd frontend`
+2. Install dependencies: `npm install`
+3. Configure your `.env.local` file `NEXT_PUBLIC_API_URL=http://localhost:5000`.
+4. Start Next.js: `npm run dev`
+*(Runs beautifully on `http://localhost:3000`)*
+
+---
+
+## 🌍 Production Deployment
+
+This project consists of all configuration files needed for a free, scalable, production launch.
+
+- **Vercel** (`frontend/vercel.json`): One-click frontend deployment optimized for Next.js features and security headers.
+- **Render.com** (`backend/render.yaml`): Seamless Web Service deployment connecting directly to backend Git pushes.
+- **Supabase API**: Easy drop-in configuration for cloud PostgreSQL databases.
+
+Visit `artifacts/deployment_guide.md` and `artifacts/n8n_setup.md` in the project configuration notes for the exact 3-step blueprint for a perfect production launch!
