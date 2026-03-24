@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ProductCard from "../components/ProductCard";
+import ProductCard from "@/components/ProductCard";
 
 interface Product {
   id: number;
@@ -19,13 +19,15 @@ export default function Home() {
     fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/products`)
       .then((res) => res.json())
       .then((data) => {
-        // Handle both { success, data: [...] } and plain array responses
-        const list = Array.isArray(data.data) ? data.data : Array.isArray(data) ? data : [];
-        setProducts(list);
+        if (data && data.success && Array.isArray(data.data)) {
+          setProducts(data.data);
+        } else {
+          setProducts([]);
+        }
         setLoading(false);
       })
       .catch((err) => {
-        console.error("Failed to fetch products:", err);
+        console.error(err);
         setLoading(false);
       });
   }, []);
@@ -50,7 +52,7 @@ export default function Home() {
         
         {loading ? (
           <div style={{ padding: '4rem 0' }}>
-            <div className="spinner" style={{ borderColor: 'var(--primary-gold)' }}></div>
+            <div className="spinner"></div>
           </div>
         ) : (
           <div className="products-grid">

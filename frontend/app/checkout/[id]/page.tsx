@@ -70,6 +70,7 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
           product_id: product.id,
           product_name: product.name,
           price: product.price * formData.quantity,
+          quantity: formData.quantity,
         }),
       });
 

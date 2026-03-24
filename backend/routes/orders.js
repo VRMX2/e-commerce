@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
-const { appendOrderToSheet } = require('../services/googleSheets');
+const { sendOrderTon8n } = require('../services/n8nWebhook');
 
 // Algerian wilayas list for validation
 const ALGERIAN_WILAYAS = [
@@ -9,7 +9,7 @@ const ALGERIAN_WILAYAS = [
   'البليدة', 'البويرة', 'تمنراست', 'تبسة', 'تلمسان', 'تيارت', 'تيزي وزو', 'الجزائر',
   'الجلفة', 'جيجل', 'سطيف', 'سعيدة', 'سكيكدة', 'سيدي بلعباس', 'عنابة', 'قالمة',
   'قسنطينة', 'المدية', 'مستغانم', 'المسيلة', 'معسكر', 'ورقلة', 'وهران', 'البيض',
-  'إليزي', 'برج بوعريريج', 'بومرداس', 'الطارف', 'تندوف', 'تيسمسيلت', 'الوادي',
+  'إليزي', 'برج بوعريريج', 'بومرداس', 'الطارف', 'تندوف', 'تسمسيلت', 'الوادي',
   'خنشلة', 'سوق أهراس', 'تيبازة', 'ميلة', 'عين الدفلى', 'النعامة', 'عين تموشنت',
   'غرداية', 'غليزان', 'تيميمون', 'برج باجي مختار', 'أولاد جلال', 'بني عباس',
   'عين صالح', 'عين قزام', 'تقرت', 'جانت', 'المغير', 'المنيعة'
@@ -20,7 +20,8 @@ const ALGERIAN_WILAYAS = [
  * Creates a new Cash on Delivery order
  */
 router.post('/', async (req, res) => {
-  const { full_name, phone, wilaya, commune, product_id, product_name, price } = req.body;
+  // Extract quantity alongside other fields
+  const { full_name, phone, wilaya, commune, product_id, product_name, price, quantity = 1 } = req.body;
 
   // --- Validation ---
   const errors = [];
@@ -34,12 +35,15 @@ router.post('/', async (req, res) => {
     errors.push('رقم الهاتف غير صحيح. يجب أن يبدأ بـ 05 أو 06 أو 07 ويتكون من 10 أرقام');
   }
 
-  if (!wilaya || !ALGERIAN_WILAYAS.includes(wilaya)) {
+  // Extract just the name if it comes as "1 - أدرار"
+  const wilayaName = wilaya ? wilaya.split('-').pop().trim() : '';
+
+  if (!wilayaName || !ALGERIAN_WILAYAS.includes(wilayaName)) {
     errors.push('الولاية مطلوبة');
   }
 
   if (!commune || commune.trim().length < 2) {
-    errors.push('البلدية مطلوبة');
+    errors.push('البلدية مطلوبة (العنوان)');
   }
 
   if (!product_name) {
@@ -73,11 +77,11 @@ router.post('/', async (req, res) => {
 
     const newOrder = result.rows[0];
 
-    // Append to Google Sheets (non-blocking - don't fail if Sheets is unavailable)
+    // Trigger n8n Webhook for Automation
     try {
-      await appendOrderToSheet(newOrder);
-    } catch (sheetsError) {
-      console.warn('⚠️  Google Sheets append failed (order still saved):', sheetsError.message);
+      await sendOrderTon8n(newOrder, quantity);
+    } catch (n8nError) {
+      console.warn('⚠️  n8n Webhook failed (order still saved):', n8nError.message);
     }
 
     console.log(`✅ New order created: #${newOrder.id} for ${newOrder.full_name}`);
